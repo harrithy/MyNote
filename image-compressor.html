@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2329694c'/%3E%3Cpath d='M10 27l8-9 5 5 4-6 5 10M10 11h20v18H10z' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+  <title>轻图 · 本地图片压缩</title>
+  <style>
+    /* 单文件界面：使用系统字体和内嵌图标，离线打开也能完整显示。 */
+    :root{--paper:#f7f8f4;--ink:#253e34;--muted:#7a867e;--green:#29694c;--line:#e3e8e0;--soft:#edf3e9;--white:#fff;--orange:#a36c31}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif;font-size:14px}button,input,select{font:inherit}button,select{cursor:pointer}button{display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .18s,transform .18s}button:hover:not(:disabled){transform:translateY(-1px)}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #8fba90;outline-offset:4px}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}button svg{width:17px;height:17px}.shell{width:min(1120px,calc(100% - 64px));margin:auto}header{height:92px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;font-size:21px;font-weight:750;letter-spacing:-.5px}.brand-icon{width:35px;height:35px;background:var(--green);color:white;border-radius:11px;display:grid;place-items:center}.brand span:last-child{font-size:10px;letter-spacing:2px;color:var(--muted);border-left:1px solid #cbd4c7;padding-left:13px;margin-left:3px;font-weight:600}.privacy{display:flex;align-items:center;gap:7px;color:#687d6d;font-size:12px}.privacy svg{width:15px;height:15px}main{padding:51px 0 32px}.intro{display:flex;justify-content:space-between;align-items:end;margin-bottom:29px}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--green);font-weight:700;margin:0 0 13px}.intro h1{font-size:38px;line-height:1.3;letter-spacing:-1.6px;margin:0 0 12px;font-weight:650}.intro p{color:var(--muted);margin:0;line-height:1.8}.intro-note{font-size:12px;display:flex;align-items:center;gap:7px;color:var(--muted);padding-bottom:5px}.dot{width:6px;height:6px;border-radius:50%;background:#80a875}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 306px;gap:22px;align-items:stretch}.upload-panel,.settings,.results{background:white;border:1px solid var(--line);border-radius:17px}.upload-panel{padding:23px;display:flex;flex-direction:column}.panel-heading{font-size:13px;font-weight:650;display:flex;align-items:center;gap:8px;margin:0 0 20px}.step{display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#edf2e9;color:#68825e;font-size:11px}.dropzone{border:1.5px dashed #c4d1be;border-radius:12px;background:#fafcf7;min-height:293px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;transition:.2s;padding:25px;text-align:center}.dropzone.dragging{background:#e9f2e3;border-color:var(--green)}.upload-icon{width:62px;height:62px;display:grid;place-items:center;background:#eaf1e3;color:#60834e;border-radius:18px;margin-bottom:19px;transform:rotate(-5deg)}.upload-icon svg{width:29px;height:29px;transform:rotate(5deg)}.dropzone h2{font-size:19px;font-weight:600;margin:0 0 9px}.dropzone p{font-size:12px;color:var(--muted);margin:0 0 22px}.primary{background:var(--green);border:1px solid var(--green);color:#fff;border-radius:8px;padding:11px 23px;font-weight:550}.primary:hover:not(:disabled){background:#20583f}.upload-foot{display:flex;justify-content:space-between;gap:10px;color:#8b948c;font-size:11px;padding:17px 1px 0}.settings{padding:23px}.settings .panel-heading{margin-bottom:26px}.field{margin-bottom:24px}.field-label{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;margin-bottom:12px}.value{background:var(--soft);color:var(--green);font-size:11px;border-radius:5px;padding:4px 7px;font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:var(--green);cursor:pointer;margin:3px 0 7px}.range-labels{display:flex;justify-content:space-between;font-size:10px;color:#90988f}.formats{display:flex;gap:6px}.format{flex:1;padding:9px 0;border:1px solid var(--line);border-radius:7px;background:white;color:#7c877d;font-size:11px;font-weight:600}.format.active{background:var(--soft);border-color:#9fb594;color:var(--green)}select{width:100%;padding:10px 12px;color:var(--ink);border:1px solid var(--line);border-radius:7px;background:#fff;font-size:12px}.tip{font-size:11px;line-height:1.7;color:var(--muted);margin:10px 0 0;min-height:38px}.setting-footer{border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:center;gap:7px;font-size:11px;color:#79916e}.setting-footer svg{width:14px;height:14px}.results{margin-top:23px;padding:22px 24px}.results-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.results-title{display:flex;align-items:center;gap:9px;margin:0;font-size:14px;font-weight:600}.count{background:#f0f3eb;border-radius:5px;font-size:10px;color:#7e8d72;padding:3px 7px}.text-button{border:0;background:transparent;color:var(--muted);padding:6px;font-size:11px}.result-actions{display:flex;align-items:center;gap:12px}.download-all{padding:9px 14px;font-size:12px}.empty{padding:37px 10px 33px;display:flex;align-items:center;justify-content:center;gap:10px;color:#9ba295;font-size:12px}.empty svg{width:17px;height:17px}.summary{display:flex;gap:32px;padding:22px 0 17px;border-bottom:1px solid var(--line);margin-bottom:2px}.summary label{font-size:10px;color:var(--muted);display:block;margin-bottom:6px}.summary strong{font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}.summary .saved strong{color:var(--green)}.file-row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center;padding:17px 0;border-bottom:1px solid #edf0e9}.file-row:last-child{border-bottom:0}.thumb{width:52px;height:52px;object-fit:cover;border-radius:8px;background:#f0f2ed}.filename{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:7px}.file-meta{font-size:11px;color:var(--muted);line-height:1.65}.file-meta .saving{display:inline-block;color:var(--green);background:var(--soft);padding:1px 5px;margin-left:7px;border-radius:4px}.file-meta .warning{color:var(--orange)}.row-actions{display:flex;align-items:center;gap:7px}.small-button{border:1px solid var(--line);border-radius:6px;background:white;color:#648059;font-size:11px;padding:7px 10px}.icon-button{padding:7px;border:0;background:transparent;color:#99a292}.icon-button svg{width:15px;height:15px}.features{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:29px 4px 0}.feature{display:flex;gap:11px;align-items:start}.feature>svg{color:#899b7c;width:19px;margin-top:1px}.feature strong{font-size:11px;font-weight:600;display:block;margin-bottom:6px}.feature p{color:#8a9487;font-size:11px;line-height:1.7;margin:0}footer{display:flex;justify-content:space-between;color:#99a18f;font-size:10px;letter-spacing:.3px;margin-top:36px;padding-top:20px;border-top:1px solid var(--line)}.notices{margin:0 0 16px;padding:11px 15px;border:1px solid #e8d7b9;background:#fff9ee;border-radius:8px;color:#95682f;font-size:12px;line-height:1.7;white-space:pre-line}.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}[hidden]{display:none!important}dialog{border:1px solid var(--line);padding:0;border-radius:16px;width:min(850px,calc(100% - 32px));color:var(--ink);box-shadow:0 30px 100px #14291d33}dialog::backdrop{background:#1c3029a6;backdrop-filter:blur(4px)}.dialog-head{display:flex;align-items:center;justify-content:space-between;padding:17px 22px;border-bottom:1px solid var(--line)}.dialog-head h2{font-size:14px;margin:0}.compare-stage{position:relative;max-width:100%;height:440px;background-color:#f0f1ed;background-image:linear-gradient(45deg,#e5e7df 25%,transparent 25%),linear-gradient(-45deg,#e5e7df 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e5e7df 75%),linear-gradient(-45deg,transparent 75%,#e5e7df 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}.compare-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}.compare-divider{position:absolute;top:0;bottom:0;left:50%;border-left:2px solid white;filter:drop-shadow(0 0 2px #333)}.compare-tags{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;pointer-events:none}.compare-tags span{background:#ffffffdd;font-size:11px;border-radius:5px;padding:6px 9px}.compare-controls{padding:15px 22px;font-size:12px;color:var(--muted)}.compare-controls label{display:block;margin-bottom:8px}
+    @media(max-width:760px){.shell{width:calc(100% - 32px)}header{height:72px}.brand span:last-child,.intro-note{display:none}main{padding-top:32px}.intro h1{font-size:31px}.intro p{font-size:12px}.workspace{grid-template-columns:1fr}.settings{padding:20px}.settings .panel-heading{margin-bottom:20px}.field{margin-bottom:20px}.dropzone{min-height:255px}.results{padding:18px 16px}.features{grid-template-columns:1fr;gap:18px;margin-top:25px}.result-actions{gap:5px}.download-all{padding:9px 10px}.file-row{grid-template-columns:42px minmax(0,1fr);gap:11px}.thumb{width:42px;height:42px}.row-actions{grid-column:2;justify-content:flex-start}.summary{gap:22px}.summary strong{font-size:16px}.upload-foot{flex-direction:column;align-items:center;gap:7px}.privacy{font-size:10px}.compare-stage{height:320px}footer{font-size:9px}.results-top{align-items:center}.text-button{font-size:10px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+  <!-- 图标采用内嵌 SVG，页面不请求外部字体、图片或脚本。 -->
+  <svg aria-hidden="true" style="display:none"><defs>
+    <symbol id="image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+    <symbol id="upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+    <symbol id="shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v4h16v-4"/></symbol>
+    <symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="layers" viewBox="0 0 24 24"><path d="m12 3 10 5-10 5L2 8l10-5ZM2 12l10 5 10-5M2 16l10 5 10-5"/></symbol>
+  </defs></svg>
+  <div class="shell">
+    <header><div class="brand"><div class="brand-icon"><svg><use href="#image"/></svg></div>轻图<span>TINY IMAGE</span></div><div class="privacy"><svg><use href="#shield"/></svg>本地处理 · 保护隐私</div></header>
+    <main>
+      <div class="intro"><div><div class="eyebrow">LESS SIZE, SAME BEAUTY</div><h1>让图片，轻一点。</h1><p>简单好用的图片压缩工具，为每一张好图片减负。</p></div><div class="intro-note"><span class="dot"></span>无需安装，打开即用</div></div>
+      <div id="notice" class="notices" role="status" hidden></div>
+      <div class="workspace">
+        <section class="upload-panel" aria-labelledby="uploadHeading"><h2 class="panel-heading" id="uploadHeading"><span class="step">01</span>添加图片</h2>
+          <div id="dropzone" class="dropzone"><div class="upload-icon"><svg><use href="#upload"/></svg></div><h2>把图片拖到这里</h2><p>或点击下方按钮，从设备中选择</p><button id="choose" class="primary"><svg><use href="#image"/></svg>选择图片</button><input id="files" type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/bmp" multiple hidden></div>
+          <div class="upload-foot"><span>支持 JPG、PNG、WebP、AVIF、BMP 静态图片</span><span>单张最大 50 MB · 最多 40 张</span></div>
+        </section>
+        <aside class="settings" aria-labelledby="settingsHeading"><h2 class="panel-heading" id="settingsHeading"><span class="step">02</span>压缩设置</h2>
+          <div class="field"><label class="field-label" for="quality">图片质量<output id="qualityValue" class="value" for="quality">80%</output></label><input id="quality" type="range" min="10" max="100" value="80"><div class="range-labels"><span>体积更小</span><span>画质更好</span></div></div>
+          <div class="field"><div class="field-label" id="formatLabel">输出格式</div><div class="formats" role="group" aria-labelledby="formatLabel"><button class="format active" data-format="image/webp" aria-pressed="true">WebP</button><button class="format" data-format="image/jpeg" aria-pressed="false">JPG</button><button class="format" data-format="image/png" aria-pressed="false">PNG</button></div></div>
+          <div class="field"><label class="field-label" for="maxSize">最长边尺寸</label><select id="maxSize"><option value="0">保持原始尺寸</option><option value="2560">最大 2560 px</option><option value="1920" selected>最大 1920 px（推荐）</option><option value="1280">最大 1280 px</option><option value="800">最大 800 px</option></select><p id="formatTip" class="tip">WebP 兼顾体积与画质，支持透明背景。尺寸仅缩小，保持图片比例。</p></div>
+          <div class="setting-footer"><svg><use href="#check"/></svg>添加图片或修改设置后自动压缩</div>
+        </aside>
+      </div>
+      <section class="results" aria-labelledby="resultsHeading"><div class="results-top"><h2 class="results-title" id="resultsHeading">处理列表 <span id="count" class="count">0 张</span></h2><div class="result-actions"><button id="clear" class="text-button" disabled>清空列表</button><button id="downloadAll" class="primary download-all" disabled><svg><use href="#download"/></svg><span>全部下载</span></button></div></div>
+        <div id="summary" class="summary" hidden><div><label>原始体积</label><strong id="originalTotal">—</strong></div><div><label>处理后体积</label><strong id="compressedTotal">—</strong></div><div class="saved"><label>节省空间</label><strong id="savedTotal">—</strong></div></div>
+        <div id="empty" class="empty"><svg><use href="#image"/></svg>好图片，值得轻装上阵。添加图片开始吧。</div><div id="list"></div><p id="progress" class="visually-hidden" role="status" aria-live="polite"></p>
+      </section>
+      <div class="features"><div class="feature"><svg><use href="#shield"/></svg><div><strong>图片只属于你</strong><p>全程在浏览器中处理，不上传服务器。</p></div></div><div class="feature"><svg><use href="#spark"/></svg><div><strong>画质与体积，自由平衡</strong><p>调整质量和尺寸，滑动对比压缩效果。</p></div></div><div class="feature"><svg><use href="#layers"/></svg><div><strong>多张图片，一次搞定</strong><p>批量处理，支持单张保存与 ZIP 打包下载。</p></div></div></div>
+      <footer><span>轻图 / 给图片减负，给美好留白。</span><span>100% 本地处理 · 无需注册</span></footer>
+    </main>
+  </div>
+  <dialog id="compareDialog" aria-labelledby="compareTitle"><div class="dialog-head"><h2 id="compareTitle">画质对比</h2><button id="closeCompare" class="icon-button" aria-label="关闭对比"><svg><use href="#close"/></svg></button></div><div class="compare-stage"><img id="compareOriginal" alt="原始图片"><img id="compareResult" alt="处理后的图片" style="clip-path:inset(0 0 0 50%)"><div id="divider" class="compare-divider"></div><div class="compare-tags"><span>原图</span><span>处理后</span></div></div><div class="compare-controls"><label for="compareRange">左右拖动，查看图片细节</label><input id="compareRange" type="range" min="0" max="100" value="50"></div></dialog>
+  <script>
+    'use strict';
+    // 文件、对象 URL 和任务版本集中管理，防止旧任务覆盖新设置的结果。
+    const $ = id => document.getElementById(id);
+    const state = { items: [], format: 'image/webp', version: 0, running: false, timer: null, zipBusy: false };
+    const MAX_BYTES = 50 * 1024 * 1024;
+    const extensions = { 'image/webp': 'webp', 'image/jpeg': 'jpg', 'image/png': 'png' };
+    const icon = name => '<svg aria-hidden="true"><use href="#' + name + '"/></svg>';
+    const bytes = n => n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(2) + ' MB';
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    function notice(message) { $('notice').textContent = message; $('notice').hidden = !message; }
+    function releaseResult(item) { if (item.outputURL) URL.revokeObjectURL(item.outputURL); item.outputURL = null; item.blob = null; }
+    function closeCompare() { $('compareDialog').close(); $('compareOriginal').removeAttribute('src'); $('compareResult').removeAttribute('src'); }
+
+    // 用 DOM 文本转义文件名，避免把本地文件名解释成 HTML。
+    function render() {
+      const ready = state.items.filter(item => item.status === 'ready');
+      const settled = state.items.every(item => item.status === 'ready' || item.status === 'error');
+      $('count').textContent = state.items.length + ' 张';
+      $('empty').hidden = state.items.length > 0;
+      $('clear').disabled = !state.items.length;
+      $('downloadAll').disabled = !ready.length || !settled || state.zipBusy;
+      $('downloadAll').querySelector('span').textContent = state.zipBusy ? '正在打包…' : state.items.some(item => item.status === 'pending' || item.status === 'processing') ? '正在压缩…' : '全部下载';
+      $('summary').hidden = !ready.length;
+      const original = ready.reduce((n, item) => n + item.file.size, 0);
+      const compressed = ready.reduce((n, item) => n + item.blob.size, 0);
+      $('originalTotal').textContent = bytes(original);
+      $('compressedTotal').textContent = bytes(compressed);
+      $('savedTotal').textContent = compressed <= original ? bytes(original - compressed) + ' / ' + (original ? Math.round((1 - compressed / original) * 100) : 0) + '%' : '体积增加 ' + bytes(compressed - original);
+      $('list').innerHTML = state.items.map(item => {
+        let meta = bytes(item.file.size) + ' · ' + (item.status === 'processing' ? '正在压缩…' : '等待处理…');
+        if (item.status === 'error') meta = '<span class="warning">' + escapeHTML(item.error) + '</span>';
+        if (item.status === 'ready') {
+          const percent = item.file.size ? Math.round((1 - item.blob.size / item.file.size) * 100) : 0;
+          meta = bytes(item.file.size) + ' → ' + bytes(item.blob.size) + '<span class="' + (percent >= 0 ? 'saving' : 'warning') + '">' + (percent >= 0 ? ' −' + percent + '%' : ' 体积增加 ' + Math.abs(percent) + '%') + '</span><br>' + item.width + ' × ' + item.height + ' px · ' + extensions[item.blob.type].toUpperCase() + (item.keptOriginal ? ' · 原图已更小，保留原文件' : '');
+        }
+        return '<article class="file-row"><img class="thumb" src="' + item.sourceURL + '" alt="" loading="lazy"><div><div class="filename" title="' + escapeHTML(item.file.name) + '">' + escapeHTML(item.file.name) + '</div><div class="file-meta">' + meta + '</div></div><div class="row-actions"><button class="small-button" data-action="compare" data-id="' + item.id + '" ' + (item.status !== 'ready' ? 'disabled' : '') + '>对比</button><button class="small-button" data-action="download" data-id="' + item.id + '" ' + (item.status !== 'ready' ? 'disabled' : '') + '>' + icon('download') + '下载</button><button class="icon-button" data-action="remove" data-id="' + item.id + '" aria-label="移除 ' + escapeHTML(item.file.name) + '">' + icon('close') + '</button></div></article>';
+      }).join('');
+      $('progress').textContent = state.items.length ? '已完成 ' + ready.length + ' / ' + state.items.length + ' 张图片' : '列表已清空';
+    }
+
+    // 输入限制避免一次持有过多大图；同名但内容或时间不同的文件仍可添加。
+    function addFiles(files) {
+      const errors = [];
+      for (const file of files) {
+        if (!/^image\/(jpeg|png|webp|avif|bmp)$/i.test(file.type)) { errors.push(file.name + '：不支持此格式，请选择 JPG、PNG、WebP、AVIF 或 BMP 静态图片。'); continue; }
+        if (file.size > MAX_BYTES || file.size === 0) { errors.push(file.name + '：文件为空或超过 50 MB。'); continue; }
+        if (state.items.some(item => item.file.name === file.name && item.file.size === file.size && item.file.lastModified === file.lastModified)) continue;
+        if (state.items.length >= 40) { errors.push('最多同时处理 40 张图片，请下载并清空后继续。'); break; }
+        state.items.push({ id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random(), file, sourceURL: URL.createObjectURL(file), status: 'pending' });
+      }
+      notice(errors.join('\n')); $('files').value = ''; schedule();
+    }
+
+    // 设置变更立即作废结果，串行解码避免并行大图占用过多内存。
+    function schedule() {
+      closeCompare(); clearTimeout(state.timer); state.version++;
+      for (const item of state.items) { releaseResult(item); item.status = 'pending'; }
+      render(); state.timer = setTimeout(processQueue, 220);
+    }
+    async function processQueue() {
+      if (state.running) return;
+      state.running = true;
+      try {
+        while (true) {
+          const item = state.items.find(entry => entry.status === 'pending');
+          if (!item) break;
+          const version = state.version;
+          const options = { format: state.format, quality: Number($('quality').value) / 100, max: Number($('maxSize').value) };
+          item.status = 'processing'; render();
+          try {
+            const result = await compress(item, options);
+            if (version !== state.version || !state.items.includes(item)) continue;
+            Object.assign(item, result, { outputURL: URL.createObjectURL(result.blob), status: 'ready' });
+          } catch (error) {
+            if (version !== state.version || !state.items.includes(item)) continue;
+            item.status = 'error'; item.error = error.message || '处理失败，请换一张图片重试。';
+          }
+          render();
+        }
+      } finally { state.running = false; render(); }
+    }
+    async function compress(item, options) {
+      const img = new Image(); img.src = item.sourceURL;
+      try { await img.decode(); } catch { throw new Error('无法读取图片，文件可能损坏，或浏览器不支持此编码。'); }
+      const ratio = options.max ? Math.min(1, options.max / Math.max(img.naturalWidth, img.naturalHeight)) : 1;
+      const width = Math.max(1, Math.round(img.naturalWidth * ratio));
+      const height = Math.max(1, Math.round(img.naturalHeight * ratio));
+      if (width * height > 24000000 || Math.max(width, height) > 8192) throw new Error('输出尺寸过大，请将最长边设为 2560 px 或更小。');
+      const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height;
+      try {
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('浏览器无法创建画布，请降低图片尺寸。');
+        // JPG 不支持透明通道，使用白色背景，避免透明区域变黑。
+        if (options.format === 'image/jpeg') { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, width, height); }
+        ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(img, 0, 0, width, height);
+        let blob = await new Promise(resolve => canvas.toBlob(resolve, options.format, options.quality));
+        if (!blob) throw new Error('图片编码失败，请降低尺寸后重试。');
+        if (blob.type !== options.format) throw new Error('当前浏览器不支持所选输出格式，请改用 JPG 或 PNG。');
+        // 只在尺寸和格式都不变时保留更小的原图，不违背用户的转换要求。
+        const keptOriginal = ratio === 1 && item.file.type === options.format && blob.size >= item.file.size;
+        if (keptOriginal) blob = item.file;
+        return { blob, width, height, keptOriginal };
+      } finally { canvas.width = 0; canvas.height = 0; img.src = ''; }
+    }
+
+    function download(blob, name) {
+      const url = URL.createObjectURL(blob); const anchor = document.createElement('a');
+      anchor.href = url; anchor.download = name; document.body.append(anchor); anchor.click(); anchor.remove();
+      // 留出下载启动时间，随后回收对象 URL。
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }
+    function outputName(item, index = '') {
+      const base = item.file.name.replace(/\.[^.]+$/, '').replace(/[<>:"/\\|?*\u0000-\u001f]/g, '_').slice(0, 120) || 'image';
+      return (index ? index + '-' : '') + base + '-compressed.' + extensions[item.blob.type];
+    }
+
+    // ZIP 使用无损的 STORE 封装：图片已经压缩，不再重复压缩，也不依赖第三方库。
+    const crcTable = Uint32Array.from({ length: 256 }, (_, n) => { for (let i = 0; i < 8; i++) n = n & 1 ? 0xedb88320 ^ (n >>> 1) : n >>> 1; return n >>> 0; });
+    function crc32(data) { let crc = 0xffffffff; for (const value of data) crc = crcTable[(crc ^ value) & 255] ^ (crc >>> 8); return (crc ^ 0xffffffff) >>> 0; }
+    async function buildZip(entries) {
+      const local = [], central = []; let offset = 0, centralSize = 0;
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i], name = new TextEncoder().encode(entry.name), data = new Uint8Array(await entry.blob.arrayBuffer());
+        const crc = crc32(data);
+        const header = new Uint8Array(30 + name.length), h = new DataView(header.buffer);
+        h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x800, true); h.setUint16(12, 33, true);
+        h.setUint32(14, crc, true); h.setUint32(18, data.length, true); h.setUint32(22, data.length, true); h.setUint16(26, name.length, true); header.set(name, 30);
+        const directory = new Uint8Array(46 + name.length), d = new DataView(directory.buffer);
+        d.setUint32(0, 0x02014b50, true); d.setUint16(4, 20, true); d.setUint16(6, 20, true); d.setUint16(8, 0x800, true); d.setUint16(14, 33, true);
+        d.setUint32(16, crc, true); d.setUint32(20, data.length, true); d.setUint32(24, data.length, true); d.setUint16(28, name.length, true); d.setUint32(42, offset, true); directory.set(name, 46);
+        local.push(header, entry.blob); central.push(directory); offset += header.length + data.length; centralSize += directory.length;
+      }
+      const end = new Uint8Array(22), view = new DataView(end.buffer);
+      view.setUint32(0, 0x06054b50, true); view.setUint16(8, entries.length, true); view.setUint16(10, entries.length, true); view.setUint32(12, centralSize, true); view.setUint32(16, offset, true);
+      return new Blob([...local, ...central, end], { type: 'application/zip' });
+    }
+
+    $('choose').addEventListener('click', () => $('files').click());
+    $('files').addEventListener('change', event => addFiles(event.target.files));
+    // 只接管拖入文件的动作，拖入普通文本不会改变页面。
+    for (const type of ['dragenter', 'dragover', 'dragleave', 'drop']) {
+      document.addEventListener(type, event => {
+        if (!Array.from(event.dataTransfer?.types || []).includes('Files')) return;
+        event.preventDefault();
+        if (type === 'dragenter' || type === 'dragover') $('dropzone').classList.add('dragging');
+        if (type === 'drop' || (type === 'dragleave' && !event.relatedTarget)) $('dropzone').classList.remove('dragging');
+        if (type === 'drop') addFiles(event.dataTransfer.files);
+      });
+    }
+    $('quality').addEventListener('input', () => { $('qualityValue').textContent = $('quality').value + '%'; schedule(); });
+    $('maxSize').addEventListener('change', schedule);
+    document.querySelectorAll('.format').forEach(button => button.addEventListener('click', () => {
+      state.format = button.dataset.format;
+      document.querySelectorAll('.format').forEach(entry => { const active = entry === button; entry.classList.toggle('active', active); entry.setAttribute('aria-pressed', String(active)); });
+      $('quality').disabled = state.format === 'image/png';
+      $('qualityValue').textContent = state.format === 'image/png' ? '无损' : $('quality').value + '%';
+      $('formatTip').textContent = state.format === 'image/png' ? 'PNG 为无损编码，质量滑块不生效。可缩小尺寸来减小体积，复杂图片建议选 WebP。' : state.format === 'image/jpeg' ? 'JPG 兼容性好，透明区域将填充为白色。尺寸仅缩小，保持图片比例。' : 'WebP 兼顾体积与画质，支持透明背景。尺寸仅缩小，保持图片比例。';
+      schedule();
+    }));
+    $('clear').addEventListener('click', () => {
+      closeCompare(); state.version++; clearTimeout(state.timer);
+      state.items.forEach(item => { releaseResult(item); URL.revokeObjectURL(item.sourceURL); });
+      state.items = []; notice(''); render();
+    });
+    $('list').addEventListener('click', event => {
+      const button = event.target.closest('button[data-action]'); if (!button) return;
+      const item = state.items.find(entry => entry.id === button.dataset.id); if (!item) return;
+      if (button.dataset.action === 'remove') {
+        closeCompare(); state.items = state.items.filter(entry => entry !== item); releaseResult(item); URL.revokeObjectURL(item.sourceURL); render(); return;
+      }
+      if (item.status !== 'ready') return;
+      if (button.dataset.action === 'download') download(item.blob, outputName(item));
+      if (button.dataset.action === 'compare') {
+        $('compareTitle').textContent = item.file.name;
+        $('compareOriginal').src = item.sourceURL; $('compareResult').src = item.outputURL;
+        $('compareRange').value = 50; updateComparison(); $('compareDialog').showModal();
+      }
+    });
+    function updateComparison() { const value = $('compareRange').value; $('compareResult').style.clipPath = 'inset(0 0 0 ' + value + '%)'; $('divider').style.left = value + '%'; }
+    $('compareRange').addEventListener('input', updateComparison);
+    $('closeCompare').addEventListener('click', closeCompare);
+    $('compareDialog').addEventListener('click', event => { if (event.target === $('compareDialog')) closeCompare(); });
+    $('downloadAll').addEventListener('click', async () => {
+      // 先快照 Blob，打包期间清空列表或更改设置不会破坏本次下载。
+      const ready = state.items.filter(item => item.status === 'ready');
+      if (!ready.length || state.zipBusy) return;
+      if (ready.length === 1) { download(ready[0].blob, outputName(ready[0])); return; }
+      const entries = ready.map((item, index) => ({ blob: item.blob, name: outputName(item, String(index + 1).padStart(2, '0')) }));
+      state.zipBusy = true; render();
+      try { download(await buildZip(entries), '轻图-压缩图片.zip'); }
+      catch { notice('打包失败，请尝试单张下载，或减少图片数量后重试。'); }
+      finally { state.zipBusy = false; render(); }
+    });
+    render();
+  </script>
+</body>
+</html>
