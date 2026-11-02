@@ -16,3 +16,14 @@ elif harrio == "harrio2":
     print("Hello, harrio2!")
 else:
     print("Hello, world!")
+
+
+# match case
+
+match harrio:
+    case "harrio":
+        print("Hello, harrio13!")
+    case "harrio2":
+        print("Hello, harrio2!")
+    case _:
+        print("Hello, world!")
