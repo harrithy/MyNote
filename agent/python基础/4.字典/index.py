@@ -1,10 +1,10 @@
-"""
+'''
 Author       : harrio
 Date         : 2026-10-17 01:58:43
 LastEditors  : harrio
-LastEditTime : 2026-10-17 17:18:53
-Description  :
-"""
+LastEditTime : 2026-10-21 20:22:27
+Description  : 
+'''
 # 字典 dict 相当于js里的map
 
 my_dict = {"name": "harrio", "age": 23, "location": "China"}

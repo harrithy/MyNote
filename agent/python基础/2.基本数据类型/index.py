@@ -1,3 +1,10 @@
+'''
+Author       : harrio
+Date         : 2026-10-16 17:38:57
+LastEditors  : harrio
+LastEditTime : 2026-10-24 14:51:46
+Description  : 基本数据类型
+'''
 # 整数
 num = 10
 
