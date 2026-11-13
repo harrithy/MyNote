@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1423">
+<link rel="icon" href="data:,">
+<title>环上见，鹈鹕！｜土星环骑行大奖赛</title>
+<style>
+/* 全部视觉与字体均由本文件和系统提供，无需网络资源。 */
+:root{color-scheme:dark;--ink:#f4ead5;--muted:#91a0ad;--gold:#edbc73;--mint:#8cdbca}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:#0b1423;color:var(--ink);font-family:"Segoe UI","Microsoft YaHei",sans-serif}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:2px solid var(--mint);outline-offset:5px}
+.stage{position:relative;isolation:isolate;width:100%;height:100%;min-height:560px;background:radial-gradient(ellipse at 50% 62%,#26324144,transparent 62%)}
+.stage:after{content:"";position:absolute;inset:18px;border:1px solid #bdcfdf16;border-radius:22px;pointer-events:none;z-index:4}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.topbar{position:absolute;top:43px;left:52px;right:52px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.brand{display:flex;gap:12px;align-items:center}.brand svg{width:38px;height:38px;stroke:var(--gold)}
+.brand-name{font-size:12px;letter-spacing:3px;font-weight:650}.brand-sub{margin-top:4px;font-size:9px;letter-spacing:3.2px;color:var(--muted)}
+.on-air{display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:2px;color:#b4bec8}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 13px #8cdbca80;animation:beacon 3s ease-in-out infinite}
+.intro{position:absolute;top:126px;left:62px;z-index:2;pointer-events:none}
+.eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold);display:flex;align-items:center;gap:10px}.eyebrow:before{content:"";width:25px;height:1px;background:var(--gold)}
+h1{font-size:clamp(36px,4.2vw,64px);font-weight:520;line-height:1.2;letter-spacing:-2px;margin:18px 0 15px}h1 em{font-style:normal;color:var(--gold)}
+.intro p{font-size:12px;color:#a5b1be;letter-spacing:2px;line-height:1.9;margin:0}.intro small{display:block;font-size:9px;letter-spacing:4px;color:#788897;margin-top:17px}
+.race-note{position:absolute;right:64px;top:142px;text-align:right;z-index:2;pointer-events:none}
+.race-note .label{font-size:9px;color:#91a0ad;letter-spacing:3px}.race-note .value{font-size:32px;font-family:Georgia,serif;font-style:italic;color:var(--gold);margin-top:7px}.race-note .detail{font-size:10px;letter-spacing:2px;color:#8293a2;margin-top:7px}
+.caption{position:absolute;right:66px;bottom:155px;color:#7e90a0;font-size:9px;letter-spacing:2.4px;z-index:2}.caption span{color:var(--gold);margin-right:8px}
+.dock{position:absolute;bottom:41px;left:52px;right:52px;min-height:84px;border-top:1px solid #cad8e126;display:flex;align-items:center;gap:30px;z-index:3}
+.controls{display:flex;align-items:center;gap:12px;flex-shrink:0}.play{width:42px;height:42px;display:grid;place-items:center;border:1px solid #e6d9c54d;border-radius:50%;background:#e2c89a08;transition:background .2s}.play:hover{background:#e2c89a20}.play svg{width:15px;height:15px;fill:var(--ink)}
+.speed{background:none;border:0;font-size:11px;letter-spacing:1px;padding:11px 5px;min-width:54px}.speed span{font-size:9px;color:#91a0ad;margin-left:4px}
+.standings{display:flex;flex:1;gap:12px;min-width:0}.rider-card{flex:1;min-width:0;display:flex;align-items:center;gap:10px}.rank{font-size:22px;font-family:Georgia,serif;font-style:italic;color:#7c8b99;min-width:18px}.rider-color{width:3px;height:25px;background:var(--rider);border-radius:3px}.rider-name{font-size:11px;letter-spacing:1px;white-space:nowrap}.rider-number{font-size:8px;color:#80919f;letter-spacing:2px;margin-top:5px}
+.lap{min-width:110px;padding-left:25px;border-left:1px solid #cad8e126}.lap-label{font-size:8px;letter-spacing:2px;color:#91a0ad}.lap-count{font-size:22px;font-family:Georgia,serif;margin-top:3px;font-variant-numeric:tabular-nums}.lap-count small{font-family:"Segoe UI",sans-serif;font-size:9px;color:#8293a2;letter-spacing:1px;margin-left:7px}.lap-track{height:2px;background:#ffffff15;margin-top:7px;overflow:hidden}.lap-track i{display:block;background:var(--gold);height:100%;width:0}
+.hint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-size:8px;color:#647685;letter-spacing:2px;white-space:nowrap;z-index:3}.hint kbd{font:inherit;border:1px solid #7d91a03b;padding:1px 4px;border-radius:3px;margin-right:5px}
+@keyframes beacon{50%{opacity:.35}}
+@media(min-width:1600px){.intro{left:7%;top:16%}.race-note{right:7%;top:18%}}
+@media(max-width:800px){.topbar{top:34px;left:34px;right:34px}.intro{left:37px;top:115px}.race-note{right:36px;top:130px}.race-note .value{font-size:26px}.dock{left:34px;right:34px;gap:20px}.standings{gap:7px}.rider-card{gap:6px}.rider-name{font-size:10px}.rank{font-size:18px}.lap{padding-left:15px;min-width:86px}.caption{right:37px;bottom:153px}.on-air .sector{display:none}}
+@media(max-width:580px){.stage:after{inset:10px;border-radius:17px}.topbar{top:30px;left:27px;right:27px}.brand-name{font-size:10px;letter-spacing:2px}.brand-sub{font-size:7px;letter-spacing:2.4px}.brand svg{width:30px;height:30px}.on-air{font-size:8px;gap:7px;letter-spacing:1px}.intro{top:108px;left:30px}h1{font-size:39px;margin:16px 0 12px}.eyebrow{font-size:8px;letter-spacing:3px}.intro p{font-size:10px;letter-spacing:1px}.intro small{font-size:8px;letter-spacing:2px;margin-top:12px}.race-note{top:auto;bottom:240px;right:30px}.race-note .label{font-size:7px;letter-spacing:2px}.race-note .value{font-size:24px}.race-note .detail{font-size:8px}.dock{bottom:40px;left:28px;right:28px;min-height:130px;flex-wrap:wrap;gap:0;align-content:center;justify-content:space-between}.controls{order:2;margin-top:17px}.standings{order:1;flex-basis:100%;gap:12px}.rider-card{gap:6px}.rider-color{height:22px;width:2px}.rider-name{font-size:9px;letter-spacing:0}.rider-number{font-size:7px;letter-spacing:1px}.rank{font-size:18px;min-width:10px}.lap{order:3;margin-top:15px;display:flex;gap:9px;align-items:center;border:0;padding:0;min-width:0}.lap-label{font-size:7px}.lap-count{margin:0;font-size:20px}.lap-count small{font-size:8px}.lap-track{width:43px;margin:0}.caption{left:30px;right:auto;bottom:192px;font-size:7px;letter-spacing:1.7px}.hint{bottom:23px;font-size:7px;letter-spacing:1px}.play{width:34px;height:34px}.speed{padding:5px}.race-note .detail{display:none}}
+@media(max-height:680px) and (min-width:581px){.topbar{top:29px}.intro{top:93px}h1{font-size:40px}.intro small{display:none}.race-note{top:104px}.dock{bottom:30px;min-height:65px}.caption{bottom:113px}.hint{bottom:15px}}
+@media(prefers-reduced-motion:reduce){.live-dot{animation:none}}
+</style>
+</head>
+<body>
+<main class="stage">
+  <canvas id="universe" role="img" aria-label="四只长喙鹈鹕骑着自行车，在金色土星环赛道上环绕竞速；骑手会经过土星背面，再从前方出现。"></canvas>
+  <header class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="22" cy="22" r="10" stroke-width="1.3"/><ellipse cx="22" cy="22" rx="21" ry="6.6" transform="rotate(-27 22 22)" stroke-width="1.3"/><path d="M15 17c3-3 7-3 10-2M17 20l11-2" opacity=".5"/></svg>
+      <div><div class="brand-name">ORBITAL CYCLING CLUB</div><div class="brand-sub">奇妙宇宙 · 环行俱乐部</div></div>
+    </div>
+    <div class="on-air"><span class="sector">SATURN / SECTOR 06</span><span class="live-dot"></span><span id="liveText">LIVE</span></div>
+  </header>
+  <section class="intro">
+    <div class="eyebrow">THE SATURN GRAND PRIX</div>
+    <h1>环上见，<em>鹈鹕！</em></h1>
+    <p>长喙迎风，脚踏星尘。<br>今天，土星环是我们的自行车赛道。</p>
+    <small>A LITTLE FEATHER. A GIANT LAP.</small>
+  </section>
+  <aside class="race-note"><div class="label">RACE CIRCUIT / 赛道</div><div class="value">The Golden Ring</div><div class="detail">04 位鹈鹕骑手 · 无限圈赛</div></aside>
+  <div class="caption"><span>✦</span>低重力，高斗志。禁止用翅膀超车。</div>
+  <footer class="dock">
+    <div class="controls">
+      <button class="play" id="play" aria-label="暂停比赛" aria-pressed="false" title="暂停 / 继续（空格键）"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="playIcon" d="M4 3h3v10H4zM9 3h3v10H9z"/></svg></button>
+      <button class="speed" id="speed" aria-label="切换比赛速度，当前一倍速">1× <span>速度</span></button>
+    </div>
+    <div class="standings" aria-label="实时比赛排名" id="standings"></div>
+    <div class="lap"><div class="lap-label">LEADER / 领跑圈数</div><div class="lap-count"><span id="lapNumber">01</span><small>LAP</small></div><div class="lap-track"><i id="lapProgress"></i></div></div>
+  </footer>
+  <div class="hint"><kbd>SPACE</kbd>暂停片刻，看看宇宙。<span aria-hidden="true"> &nbsp;·&nbsp; </span>移动指针，轻探星空</div>
+</main>
+<script>
+/* 用统一三维坐标投影星环、车轮接地点与骑手，保证轨迹和遮挡一致。 */
+(() => {
+  'use strict';
+  const canvas=document.getElementById('universe'),ctx=canvas.getContext('2d');
+  const TAU=Math.PI*2,F=1550,R=173,tilt=.46,up=Math.sqrt(1-tilt*tilt),roll=-.21;
+  const cr=Math.cos(roll),sr=Math.sin(roll);
+  let width=0,height=0,dpr=1,scale=1,cx=0,cy=0,time=0,last=0,paused=false,speed=1,uiClock=0;
+  let pointer={x:0,y:0},drift={x:0,y:0},backRing,frontRing,planet,sky;
+  const motionQuery=matchMedia('(prefers-reduced-motion: reduce)');
+  const riders=[
+    {name:'芒果号',number:'07',color:'#f2bd70',dark:'#a96939',radius:389,base:1.82,phase:.2},
+    {name:'薄荷号',number:'12',color:'#85d8c5',dark:'#3a8c85',radius:413,base:1.35,phase:2.1},
+    {name:'莓莓号',number:'03',color:'#e8a1b1',dark:'#a35f7d',radius:437,base:.84,phase:4.2},
+    {name:'云朵号',number:'21',color:'#94bfe7',dark:'#5e7da6',radius:461,base:4.5,phase:5.4}
+  ];
+  const standings=document.getElementById('standings');
+  riders.forEach((r,i)=>{const el=document.createElement('div');el.className='rider-card';el.style.setProperty('--rider',r.color);el.innerHTML='<span class="rank">'+(i+1)+'</span><span class="rider-color"></span><div><div class="rider-name">'+r.name+'</div><div class="rider-number">NO. '+r.number+'</div></div>';standings.appendChild(el);r.el=el;});
+  let seed=74219;
+  function random(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
+  const stars=Array.from({length:250},()=>({x:random(),y:random(),r:.3+random()*1.1,a:.12+random()*.54,p:random()*TAU}));
+  const dust=Array.from({length:360},()=>({r:220+random()*300,a:random()*TAU,s:.3+random()*.85,p:random()*TAU}));
+  const mod=a=>(a%TAU+TAU)%TAU;
+  function world(a,r,h=0){
+    const x=Math.cos(a)*r,y=Math.sin(a)*r*tilt-h*up;
+    return {x:x*cr-y*sr,y:x*sr+y*cr,z:Math.sin(a)*r*up+h*tilt};
+  }
+  function project(p){const k=F/(F-p.z);return{x:p.x*k,y:p.y*k,k};}
+  function point(a,r,h=0){return project(world(a,r,h));}
+  function path(c,points,close=true){c.beginPath();points.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));if(close)c.closePath();}
+  function stroke(c,points,color,w=1){path(c,points,false);c.strokeStyle=color;c.lineWidth=w;c.stroke();}
+  function ellipse(c,x,y,rx,ry,fill,outline,line=1){c.beginPath();c.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),0,0,TAU);c.fillStyle=fill;c.fill();if(outline){c.strokeStyle=outline;c.lineWidth=line;c.stroke();}}
+  function shape(c,commands,fill,outline,line=1){c.beginPath();commands(c);if(fill){c.fillStyle=fill;c.fill();}if(outline){c.strokeStyle=outline;c.lineWidth=line;c.stroke();}}
+  function texture(w,h,k,paint){const c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);const g=c.getContext('2d');g.scale(k,k);paint(g);return c;}
+  function ringStrip(c,inner,outer,a,b,fill){const p=[];const n=Math.max(4,Math.ceil((b-a)*70));for(let j=0;j<=n;j++)p.push(point(a+(b-a)*j/n,outer));for(let j=n;j>=0;j--)p.push(point(a+(b-a)*j/n,inner));path(c,p);c.fillStyle=fill;c.fill();}
+  function ringArc(c,r,a,b,color,w=1,dash=[]){const p=[];for(let j=0;j<=150;j++)p.push(point(a+(b-a)*j/150,r));c.setLineDash(dash);stroke(c,p,color,w);c.setLineDash([]);}
+  function makeRing(c,front){
+    c.translate(700,500);const a=front?0:Math.PI,b=a+Math.PI;
+    const bands=[[218,243,'#8e82654a'],[246,285,'#bba77b70'],[289,326,'#b7a27b8c'],[329,341,'#c9b48b78'],[348,369,'#d2b9898c'],[376,475,'#e3cfaa68'],[481,501,'#c5b18a68'],[505,517,'#bcb79e24']];
+    bands.forEach(([i,o,color])=>ringStrip(c,i,o,a,b,color));
+    // 细密同心纹理与卡西尼缝让赛道仍然明确属于土星环。
+    for(let r=220;r<516;r+=2.8){if(r>341&&r<348||r>369&&r<376||r>475&&r<481)continue;const alpha=.055+.12*(.5+.5*Math.sin(r*2.9));ringArc(c,r,a,b,'rgba(255,231,184,'+alpha+')',.55+(r%3)*.15);}
+    [378,402,426,450,474].forEach(r=>ringArc(c,r,a,b,'#fff1c54d',.85,[5,10]));
+    [376,475].forEach(r=>ringArc(c,r,a,b,'#f0d9aa9c',1.35));
+    ringArc(c,353,a,b,'#fbdfa663',1.3);ringArc(c,500,a,b,'#d8c7a447',.8);
+    // 小箭头沿赛道切线排布，明确前进方向。
+    for(let k=0;k<22;k++){const t=k*TAU/22;if(t<a||t>b)continue;const rr=486;const p=[point(t-.025,rr-3),point(t,rr),point(t-.025,rr+3)];stroke(c,p,'#dcc99c8a',1.1);}
+    if(front){
+      const t=1.04;
+      for(let j=0;j<10;j++)for(let k=0;k<2;k++)ringStrip(c,377+j*9.8,377+(j+1)*9.8,t+(k-1)*.014,t+k*.014,(j+k)%2?'#24313ce6':'#fff1d4dd');
+    }
+    // 右侧阴影与迎光侧高光使环面拥有柔和的厚度。
+    c.globalCompositeOperation='source-atop';
+    const shade=c.createLinearGradient(-530,-160,530,240);shade.addColorStop(0,'#ffdca91a');shade.addColorStop(.52,'#20334200');shade.addColorStop(1,'#05101a60');c.fillStyle=shade;c.fillRect(-700,-500,1400,1000);c.globalCompositeOperation='source-over';
+  }
+  function makePlanet(c){
+    c.translate(235,235);c.rotate(roll);
+    c.save();c.beginPath();c.arc(0,0,R,0,TAU);c.clip();
+    let g=c.createLinearGradient(-130,-180,140,180);g.addColorStop(0,'#f5d69b');g.addColorStop(.25,'#ddba7d');g.addColorStop(.6,'#b68d5c');g.addColorStop(1,'#795944');c.fillStyle=g;c.fillRect(-R,-R,R*2,R*2);
+    const tones=['#ffe9b5','#e2bc82','#aa7b50','#e8c58c','#ab8256','#f1cf94','#8f714f'];
+    for(let j=0;j<58;j++){const y=-178+j*6.3,thick=1.3+(Math.sin(j*8.1)*.5+.5)*6;c.globalAlpha=.14+(Math.sin(j*3.7)*.5+.5)*.15;c.fillStyle=tones[j%tones.length];c.beginPath();c.moveTo(-190,y);c.bezierCurveTo(-75,y+22,70,y+25,190,y+3);c.lineTo(190,y+thick+3);c.bezierCurveTo(70,y+thick+25,-75,y+thick+22,-190,y+thick);c.closePath();c.fill();}
+    c.globalAlpha=1;
+    for(let j=0;j<1800;j++){const x=random()*350-175,y=random()*350-175;c.globalAlpha=random()*.065;c.fillStyle=j%2?'#fff0b9':'#241b19';c.fillRect(x,y,.6+random()*1.5,.5);}
+    c.globalAlpha=1;
+    // 球面明暗、反照光及环在球面上的柔和投影。
+    g=c.createRadialGradient(-72,-90,10,20,18,211);g.addColorStop(0,'#ffe3a82b');g.addColorStop(.55,'#3a302000');g.addColorStop(.83,'#251f2850');g.addColorStop(1,'#071320db');c.fillStyle=g;c.fillRect(-190,-190,380,380);
+    c.save();c.rotate(-.015);c.filter='blur(3px)';shape(c,p=>{p.moveTo(-185,42);p.bezierCurveTo(-90,68,66,70,185,42);p.lineTo(185,58);p.bezierCurveTo(60,92,-90,83,-185,50);p.closePath();},'#3a2a2b38');c.restore();
+    c.restore();
+    c.beginPath();c.arc(0,0,R-.4,0,TAU);c.strokeStyle='#fce1b44f';c.lineWidth=.8;c.stroke();
+    c.beginPath();c.arc(-.6,-.8,R-.8,Math.PI*.9,Math.PI*1.66);c.strokeStyle='#ffe6bcb0';c.lineWidth=1.1;c.stroke();
+  }
+  function resize(){
+    width=innerWidth;height=innerHeight;dpr=Math.min(devicePixelRatio||1,2);
+    canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
+    scale=Math.min((width-28)/1240,(height-305)/730);if(width<581)scale=(width-5)/1110;
+    cx=width*.51;cy=height*(width<581?.53:.54);
+    const k=Math.min(2.2,Math.max(1,scale*dpr));
+    backRing=texture(1400,1000,k,c=>makeRing(c,false));frontRing=texture(1400,1000,k,c=>makeRing(c,true));planet=texture(470,470,k,makePlanet);
+    sky=texture(width,height,dpr,c=>{
+      c.fillStyle='#0b1423';c.fillRect(0,0,width,height);
+      let g=c.createRadialGradient(width*.55,height*.52,10,width*.55,height*.52,width*.65);g.addColorStop(0,'#243747');g.addColorStop(.45,'#152333');g.addColorStop(1,'#0a1220');c.fillStyle=g;c.fillRect(0,0,width,height);
+      g=c.createRadialGradient(width*.16,height*.7,0,width*.16,height*.7,width*.46);g.addColorStop(0,'#30435420');g.addColorStop(1,'#14243300');c.fillStyle=g;c.fillRect(0,0,width,height);
+      stars.forEach(s=>ellipse(c,s.x*width,s.y*height,s.r,s.r,s.y<.3?'#d7e8ed50':'#c5dce17a'));
+      // 稀疏远星与小行星轨迹只作背景，视觉重心始终留在比赛。
+      c.save();c.translate(width*.51,height*.555);c.rotate(roll);c.setLineDash([2,12]);c.strokeStyle='#8db4c00d';c.lineWidth=1;for(const n of[1.35,1.57]){c.beginPath();c.ellipse(0,0,530*scale*n,250*scale*n,0,0,TAU);c.stroke();}c.restore();
+    });
+    if(paused)render();
+  }
+  function angle(r){return r.base+time*.225+.36*(Math.sin(time*.23+r.phase)-Math.sin(r.phase));}
+  function riderBasis(a,r){
+    const p=world(a,r),o=project(p),tx=-Math.sin(a),ty=Math.cos(a)*tilt,tz=Math.cos(a)*up;
+    const x=project({x:p.x+tx*cr-ty*sr,y:p.y+tx*sr+ty*cr,z:p.z+tz});
+    const y=project({x:p.x-up*sr,y:p.y+up*cr,z:p.z-tilt});
+    return {o,a:x.x-o.x,b:x.y-o.y,c:y.x-o.x,d:y.y-o.y};
+  }
+  function drawWheel(c,x,y,phase,color){
+    ellipse(c,x,y,14.5,14.5,'#15212b','#0b1823',3.1);ellipse(c,x,y,12.6,12.6,'#172a3580','#b7c5c7',1.05);
+    for(let j=0;j<10;j++){let a=phase+j*TAU/10;stroke(c,[{x,y},{x:x+Math.cos(a)*12,y:y+Math.sin(a)*12}],'#bfcfc764',.65);}
+    c.beginPath();c.arc(x,y,13.5,phase,phase+1.15);c.strokeStyle=color;c.lineWidth=1.6;c.stroke();ellipse(c,x,y,2.1,2.1,'#d5d8ca');
+  }
+  function drawLeg(c,phase,back){
+    const hip={x:-13,y:-56},foot={x:Math.cos(phase)*9,y:-23+Math.sin(phase)*9};
+    const dx=foot.x-hip.x,dy=foot.y-hip.y,dist=Math.hypot(dx,dy),l1=22,l2=25;
+    const along=(l1*l1-l2*l2+dist*dist)/(2*dist),bend=Math.sqrt(Math.max(0,l1*l1-along*along));
+    const knee={x:hip.x+dx*along/dist-dy*bend/dist,y:hip.y+dy*along/dist+dx*bend/dist};
+    stroke(c,[hip,knee,foot],back?'#ad7443':'#e0a35c',3.1);stroke(c,[{x:foot.x-4,y:foot.y+1},{x:foot.x+7,y:foot.y+1}],back?'#915a36':'#f5be6c',3.3);
+  }
+  function pelican(c,r,phase,mirror){
+    const bob=Math.sin(phase*2)*.65,flap=Math.sin(time*4+r.phase);
+    c.lineJoin='round';c.lineCap='round';
+    drawLeg(c,phase+Math.PI,true);
+    drawWheel(c,-35,-15,-phase*1.55,r.color);drawWheel(c,35,-15,-phase*1.55,r.color);
+    // 双三角车架、前叉、弯把和链条都固定在同一骑行平面中。
+    stroke(c,[{x:-35,y:-15},{x:-10,y:-43},{x:1,y:-15},{x:-35,y:-15}],r.color,3);
+    stroke(c,[{x:-10,y:-43},{x:23,y:-43},{x:1,y:-15},{x:35,y:-15},{x:23,y:-43},{x:20,y:-50}],r.color,3);
+    stroke(c,[{x:-12,y:-48},{x:-10,y:-43}],'#d6ddd4',2.4);stroke(c,[{x:-20,y:-49},{x:-6,y:-49}],'#152332',4);
+    stroke(c,[{x:20,y:-50},{x:32,y:-51},{x:38,y:-47},{x:34,y:-43}],'#c4d0ca',2.5);
+    ellipse(c,1,-23,7,7,'#273640','#aabbb6',1.1);stroke(c,[{x:-35,y:-16},{x:1,y:-28},{x:6,y:-20},{x:-35,y:-13}],'#c8d1b166',.7);
+    stroke(c,[{x:1-9*Math.cos(phase),y:-23-9*Math.sin(phase)},{x:1+9*Math.cos(phase),y:-23+9*Math.sin(phase)}],'#c1cec4',1.6);
+    c.save();c.translate(0,bob);
+    // 尾羽、饱满躯干、长颈及下垂喉囊构成鹈鹕的物种特征。
+    shape(c,p=>{p.moveTo(-32,-68);p.lineTo(-53,-77);p.quadraticCurveTo(-47,-61,-28,-58);p.closePath();},'#f4eee0','#827e7433');
+    ellipse(c,-15,-66,27,19,'#f4f0e5','#ccc6b5',.8);
+    shape(c,p=>{p.moveTo(-7,-69);p.bezierCurveTo(12,-80,-2,-96,12,-105);p.bezierCurveTo(20,-112,31,-108,31,-101);p.bezierCurveTo(28,-92,19,-87,21,-79);p.bezierCurveTo(24,-67,10,-54,-7,-55);p.closePath();},'#faf4e7','#cfc8b8',.85);
+    shape(c,p=>{p.moveTo(-37,-74);p.bezierCurveTo(-22,-82,-6,-80,1,-69);p.lineTo(-2,-52);p.bezierCurveTo(-18,-45,-36,-53,-38,-64);p.closePath();},r.color);
+    shape(c,p=>{p.moveTo(-29,-73);p.bezierCurveTo(-19,-79,-8,-74,-5,-63);p.bezierCurveTo(-15,-59,-28,-61,-35,-68);p.closePath();},'#fff7e9');
+    stroke(c,[{x:-30,y:-68},{x:-17,y:-64},{x:-8,y:-65}],'#a6a59b',.7);
+    shape(c,p=>{p.moveTo(-5,-76);p.bezierCurveTo(9,-71,17,-59,30,-51);p.lineTo(27,-48);p.bezierCurveTo(12,-51,0,-61,-10,-63);p.closePath();},'#e9e6d9','#c3bca7',.6);
+    c.save();c.translate(-22,-53);if(mirror)c.scale(-1,1);c.fillStyle=r.dark;c.font='bold 9px "Segoe UI",sans-serif';c.textAlign='center';c.fillText(r.number,0,0);c.restore();
+    // 丝巾保持连在颈根，末端随踩踏和气流轻轻摆动。
+    shape(c,p=>{p.moveTo(7,-89);p.lineTo(-7,-91);p.quadraticCurveTo(-24,-91+flap*3,-35,-99+flap*4);p.lineTo(-28,-87+flap*2);p.quadraticCurveTo(-13,-84,8,-85);p.closePath();},r.color);
+    ellipse(c,21,-106,13,12,'#fff8e9','#c9c0aa',.75);
+    shape(c,p=>{p.moveTo(29,-106);p.lineTo(78,-103);p.quadraticCurveTo(63,-85,41,-87);p.quadraticCurveTo(32,-90,29,-106);p.closePath();},'#e9a24c','#b97a3d',.8);
+    shape(c,p=>{p.moveTo(30,-108);p.quadraticCurveTo(54,-108,81,-103);p.quadraticCurveTo(84,-101,77,-100);p.lineTo(31,-102);p.closePath();},'#ffd28a','#c38944',.7);
+    stroke(c,[{x:36,y:-99},{x:71,y:-100}],'#ffdc957f',.8);stroke(c,[{x:38,y:-96},{x:43,y:-90}],'#ffda8b80',.65);
+    ellipse(c,25,-110,2.1,2.5,'#203039');ellipse(c,25.6,-110.8,.65,.75,'#fff');
+    stroke(c,[{x:22,y:-115},{x:27,y:-114}],'#7c6d54',1.2);
+    shape(c,p=>{p.moveTo(5,-116);p.bezierCurveTo(7,-132,33,-133,37,-117);p.quadraticCurveTo(22,-112,5,-116);p.closePath();},r.color,r.dark,.9);
+    stroke(c,[{x:13,y:-119},{x:16,y:-126}],r.dark,1.6);stroke(c,[{x:23,y:-119},{x:25,y:-127}],r.dark,1.6);stroke(c,[{x:30,y:-118},{x:31,y:-124}],r.dark,1.3);
+    stroke(c,[{x:9,y:-115},{x:16,y:-102},{x:28,y:-103}],'#79786c',.7);
+    c.restore();drawLeg(c,phase,false);
+  }
+  function drawRider(r){
+    const a=angle(r),b=riderBasis(a,r.radius),phase=time*7.2+r.phase;
+    // 接地阴影使用环面坐标，转弯时不会从车轮下滑走。
+    const shadow=[];for(let j=0;j<28;j++){const t=j*TAU/28;shadow.push(point(a+Math.cos(t)*48/r.radius,r.radius+Math.sin(t)*7));}path(ctx,shadow);ctx.fillStyle='#07141c45';ctx.fill();
+    // 先补充身体厚度，侧视平面转到侧缘时仍然保留自然轮廓。
+    const body=point(a,r.radius,68),side=Math.abs(Math.sin(a));
+    if(side<.3){ctx.save();ctx.translate(body.x,body.y);ctx.rotate(roll);ellipse(ctx,0,0,9*body.k,17*body.k,'#e8e5da','#a8b1ab',.6);const head=point(a,r.radius,106);ctx.restore();ellipse(ctx,head.x,head.y,7*head.k,10*head.k,'#f9f3e5');}
+    ctx.save();ctx.transform(b.a,b.b,b.c,b.d,b.o.x,b.o.y);pelican(ctx,r,phase,b.a*b.d-b.b*b.c<0);ctx.restore();
+    // 短促星尘尾迹也沿环面弯曲，长度由速度决定。
+    for(let j=0;j<3;j++){const p=[];for(let n=0;n<10;n++)p.push(point(a-.09-.009*n,r.radius+(j-1)*4,2));stroke(ctx,p,r.color+(j===1?'65':'32'),.9);}
+  }
+  function ringDust(front){
+    dust.forEach(d=>{const a=mod(d.a+time*.007);if((Math.sin(a)>=0)!==front)return;const p=point(a,d.r,1.4);ctx.globalAlpha=.15+.25*(.5+.5*Math.sin(time*.7+d.p));ellipse(ctx,p.x,p.y,d.s*p.k,d.s*p.k*.7,'#ffe2ab');});ctx.globalAlpha=1;
+  }
+  function drawFlag(){
+    const a=1.04,r=486,base=point(a,r),tip=point(a,r,100);
+    stroke(ctx,[base,tip],'#182634',3.9);stroke(ctx,[base,tip],'#ead5ad',1.5);
+    ellipse(ctx,tip.x,tip.y,2.5,2.5,'#f3cc83');
+    const flag=[];for(let j=0;j<=12;j++){const x=j*3.7;flag.push({x:tip.x+x,y:tip.y+4+Math.sin(j*.45-time*3)*j*.27});}for(let j=12;j>=0;j--){const x=j*3.7;flag.push({x:tip.x+x,y:tip.y+25+Math.sin(j*.45-time*3)*j*.27});}path(ctx,flag);ctx.fillStyle='#f6e7c5';ctx.fill();ctx.save();ctx.clip();
+    for(let y=0;y<4;y++)for(let x=0;x<7;x++)if((x+y)%2){ctx.fillStyle='#253440';ctx.fillRect(tip.x+x*7,tip.y+3+y*7,7,7);}ctx.restore();
+    ctx.fillStyle='#c2b799';ctx.font='8px "Segoe UI",sans-serif';ctx.textAlign='center';ctx.fillText('LAP / 圈线',base.x+17,base.y+19);
+  }
+  function drawDistantMoon(){
+    const x=width*.81,y=height*.315,r=width<581?7:12;
+    const g=ctx.createRadialGradient(x-r*.4,y-r*.4,1,x,y,r);g.addColorStop(0,'#a9afa7');g.addColorStop(.7,'#5c6b72');g.addColorStop(1,'#1b2c3b');ellipse(ctx,x,y,r,r,g);
+    if(width>800){stroke(ctx,[{x:x+20,y},{x:x+43,y}],'#8d9d9f40',.6);ctx.fillStyle='#7c8f9c';ctx.font='8px "Segoe UI",sans-serif';ctx.textAlign='left';ctx.fillText('TITAN',x+51,y+3);}
+  }
+  function render(){
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);ctx.drawImage(sky,0,0,width,height);
+    stars.forEach((s,i)=>{if(i%4)return;const x=s.x*width+drift.x*7,y=s.y*height+drift.y*7,alpha=.15+.35*(.5+.5*Math.sin(time*.65+s.p));ctx.globalAlpha=alpha;ellipse(ctx,x,y,s.r*.8,s.r*.8,'#e7e7d4');if(i%24===0){stroke(ctx,[{x:x-3,y},{x:x+3,y}],'#dde8dc',.4);stroke(ctx,[{x,y:y-3},{x,y:y+3}],'#dde8dc',.4);}});ctx.globalAlpha=1;
+    drawDistantMoon();
+    ctx.save();ctx.translate(cx+drift.x*4,cy+drift.y*3);ctx.scale(scale,scale);
+    const glow=ctx.createRadialGradient(-20,-20,155,0,0,310);glow.addColorStop(0,'#e7c78512');glow.addColorStop(.5,'#c5cfb008');glow.addColorStop(1,'#b1bca500');ellipse(ctx,0,0,310,310,glow);
+    ctx.drawImage(backRing,-700,-500,1400,1000);ringDust(false);
+    const ordered=[...riders].sort((a,b)=>world(angle(a),a.radius).z-world(angle(b),b.radius).z);
+    ordered.filter(r=>Math.sin(angle(r))<0).forEach(drawRider);
+    ctx.drawImage(planet,-235,-235,470,470);
+    ctx.drawImage(frontRing,-700,-500,1400,1000);ringDust(true);
+    ordered.filter(r=>Math.sin(angle(r))>=0).forEach(drawRider);drawFlag();
+    ctx.restore();
+  }
+  function updateUI(){
+    // 把起跑前的队列差计入赛程，排名连续变化而非按屏幕左右排序。
+    const order=[...riders].sort((a,b)=>(angle(b)-(b.number==='21'?TAU:0))-(angle(a)-(a.number==='21'?TAU:0)));
+    order.forEach((r,i)=>{r.el.style.order=i;r.el.querySelector('.rank').textContent=i+1;});
+    const leader=order[0],progress=Math.max(0,(angle(leader)-1.04)/TAU),lap=Math.floor(progress)+1;
+    document.getElementById('lapNumber').textContent=String(lap).padStart(2,'0');document.getElementById('lapProgress').style.width=(progress%1*100)+'%';
+  }
+  function toggle(){paused=!paused;document.getElementById('play').setAttribute('aria-pressed',String(paused));document.getElementById('play').setAttribute('aria-label',paused?'继续比赛':'暂停比赛');document.getElementById('playIcon').setAttribute('d',paused?'M4 2l10 6-10 6z':'M4 3h3v10H4zM9 3h3v10H9z');document.getElementById('liveText').textContent=paused?'PAUSED':'LIVE';document.querySelector('.live-dot').style.animationPlayState=paused?'paused':'running';last=0;}
+  document.getElementById('play').addEventListener('click',toggle);
+  document.getElementById('speed').addEventListener('click',()=>{speed=speed===1?1.5:speed===1.5?.5:1;document.getElementById('speed').innerHTML=speed+'× <span>速度</span>';document.getElementById('speed').setAttribute('aria-label','切换比赛速度，当前'+speed+'倍速');});
+  addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat&&!/BUTTON|INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();toggle();}});
+  addEventListener('pointermove',e=>{pointer.x=(e.clientX/width-.5)*2;pointer.y=(e.clientY/height-.5)*2;},{passive:true});
+  document.addEventListener('pointerleave',()=>{pointer.x=pointer.y=0;});
+  document.addEventListener('visibilitychange',()=>{last=0;});
+  addEventListener('resize',resize);
+  // 使用时间差推进，并在后台恢复时清空时间基准，避免跳帧和瞬移。
+  function tick(now){
+    if(document.hidden){last=0;requestAnimationFrame(tick);return;}
+    const dt=last?Math.min((now-last)/1000,.05):0;last=now;
+    if(!paused){time+=dt*speed*(motionQuery.matches?.25:1);const ease=1-Math.exp(-dt*3);drift.x+=(pointer.x-drift.x)*ease;drift.y+=(pointer.y-drift.y)*ease;render();uiClock+=dt;if(uiClock>.16){updateUI();uiClock=0;}}
+    requestAnimationFrame(tick);
+  }
+  resize();updateUI();render();requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
